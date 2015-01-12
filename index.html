@@ -1,0 +1,25 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="photo_ordering.css">
+  <script src="./jquery-2.1.1.js"></script>
+  <script src="./underscore.js"></script>
+  <script src="./photo_ordering.js"></script>
+</head>
+
+<body>
+  <div id="photo-container" class="orderable">
+    <div class="photo"></div>
+    <div class="photo"></div>
+    <div class="photo"></div>
+    <div class="photo"></div>
+    <div class="photo"></div>
+    <div class="photo"></div>
+    <div class="photo"></div>
+    <div class="photo"></div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      window.Orderable.attachListeners();
+    });
+  </script>
+</body>
