@@ -2,7 +2,7 @@
   window.Orderable = Orderable = {};
 
   Orderable.attachListeners = function () {
-    $('.photo').mousedown(window.Orderable.grabElement);
+    $('.photo').click(window.Orderable.grabElement);
   };
 
   Orderable.grabElement = function (event) {
@@ -10,23 +10,19 @@
     var position = $el.position();
     $el.addClass('grabbed');
     $el.addClass('moved');
-    $el.css('top', position.top);
-    $el.css('left', position.left);
-    $el.data('startX', event.offsetX);
-    $el.data('startY', event.offsetY);
+    $el.css('top', event.pageY - 150);
+    $el.css('left', event.pageX - 100);
+    $el.unbind();
     $el.mousemove(Orderable.moveElement);
-    $el.mouseup(Orderable.releaseElement);
+    $el.click(Orderable.releaseElement);
   };
 
   Orderable.moveElement = function (event) {
     var $el = $(event.target);
-    var position = $el.position();
-    var moveX = event.offsetX - $el.data('startX');
-    var moveY = event.offsetY - $el.data('startY');
-    $el.css('top', position.top + moveY);
-    $el.css('left', position.left + moveX);
-    $el.data('startX', event.offsetX);
-    $el.data('startY', event.offsetY);
+    $el.unbind('mousemove');
+    $el.css('top', event.pageY - 150);
+    $el.css('left', event.pageX - 100);
+    $el.mousemove(Orderable.moveElement);
   };
 
   Orderable.releaseElement = function (event) {
@@ -62,6 +58,9 @@
         $container.append($el);
         dropped = true;
         $container.append($currentPhoto);
+      }
+      if (!dropped) {
+        $container.append($el);
       }
     })
     $(event.target).removeClass('grabbed');
