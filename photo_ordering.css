@@ -2,15 +2,9 @@
   width: 25%;
   height: 50%;
   float: left;
-  background: black;
-}
-
-.moved {
-  background: green;
 }
 
 .grabbed {
-  background: red;
   position: absolute;
 }
 
