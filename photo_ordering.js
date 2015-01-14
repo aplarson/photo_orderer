@@ -15,7 +15,7 @@
   };
 
   PhotoArray.prototype.grabElement = function (event) {
-    this.$el = $(event.target).addClass('grabbed');
+    this.$el = $(event.target).addClass('grabbed').removeClass("in-place");
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
     this.$container.mousemove(this.moveElement.bind(this));
     this.$el.click(this.releaseElement.bind(this));
@@ -27,10 +27,9 @@
 
   PhotoArray.prototype.placePhotos = function (positions, draggedPos, $photos) {
     var dropped = false;
-    var draggedLeft = draggedPos.left;
     $photos.each(function (idx, photo) {
       var pos = positions[idx];
-      if (!dropped && inRow(draggedPos, pos) && pos.left > draggedLeft) {
+      if (!dropped && dropPosition(draggedPos, pos)) {
         this.$container.append(this.$el);
         dropped = true;
       }
@@ -44,12 +43,15 @@
   PhotoArray.prototype.releaseElement = function (event) {
     event.stopPropagation();
     var draggedPos = this.$el.position();
-    this.$el.remove();
-    var $photos = this.$container.find('.photo');
+    var $photos = this.$container.find('.in-place');
     var photoPositions = getPositions($photos);
-    $photos.remove();
+    this.$container.empty();
     this.placePhotos(photoPositions, draggedPos, $photos);
-    this.$el.removeClass('grabbed');
+    this.$el.removeClass('grabbed').addClass("in-place");
+  };
+
+  var dropPosition = function (heldPos, pos) {
+    return inRow(heldPos, pos) && pos.left > heldPos.left
   };
 
   var getPositions = function ($photos) {
