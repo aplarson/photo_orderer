@@ -16,7 +16,6 @@
 
   PhotoArray.prototype.grabElement = function (event) {
     this.$el = $(event.target).addClass('grabbed');
-    this.$container.off();
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
     this.$container.mousemove(this.moveElement.bind(this));
     this.$el.click(this.releaseElement.bind(this));
@@ -43,6 +42,7 @@
   };
 
   PhotoArray.prototype.releaseElement = function (event) {
+    event.stopPropagation();
     var draggedPos = this.$el.position();
     this.$el.remove();
     var $photos = this.$container.find('.photo');
@@ -50,7 +50,6 @@
     $photos.remove();
     this.placePhotos(photoPositions, draggedPos, $photos);
     this.$el.removeClass('grabbed');
-    setTimeout(this.attachListeners.bind(this), 0);
   };
 
   var getPositions = function ($photos) {
