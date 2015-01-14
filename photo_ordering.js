@@ -15,7 +15,10 @@
   };
 
   PhotoArray.prototype.grabElement = function (event) {
-    this.$el = $(event.target).addClass('grabbed').removeClass("in-place");
+    this.$el = $(event.target).replaceWith('<div class="photo placeholder">');
+    this.$el.addClass('grabbed').removeClass("in-place");
+    this.$container.append(this.$el);
+    this.elOrigin = this.$el.position();
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
     this.$container.mousemove(this.moveElement.bind(this));
     this.$el.click(this.releaseElement.bind(this));
@@ -23,30 +26,36 @@
 
   PhotoArray.prototype.moveElement = function (event) {
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
+    var $placeholder = this.$container.find('.placeholder');
+    $placeholder.remove();
+    var $photos = this.$container.find('.in-place');
+    var photoPositions = getPositions($photos);
+    $photos.remove();
+    this.placePhotos(photoPositions, this.$el.position(), $photos, $placeholder);
   };
 
-  PhotoArray.prototype.placePhotos = function (positions, draggedPos, $photos) {
+  PhotoArray.prototype.placePhotos = function (positions, draggedPos, $photos, $el) {
     var dropped = false;
     $photos.each(function (idx, photo) {
-      var pos = positions[idx];
-      if (!dropped && dropPosition(draggedPos, pos)) {
-        this.$container.append(this.$el);
+      if (!dropped && dropPosition(draggedPos, positions[idx])) {
+        this.$container.append($el);
         dropped = true;
       }
       this.$container.append($(photo));
     }.bind(this));
     if (!dropped) {
-      this.$container.append(this.$el);
+      this.$container.append($el);
     }
   };
 
   PhotoArray.prototype.releaseElement = function (event) {
     event.stopPropagation();
     var draggedPos = this.$el.position();
+    this.$container.find('.placeholder').remove();
     var $photos = this.$container.find('.in-place');
     var photoPositions = getPositions($photos);
     this.$container.empty();
-    this.placePhotos(photoPositions, draggedPos, $photos);
+    this.placePhotos(photoPositions, draggedPos, $photos, this.$el);
     this.$el.removeClass('grabbed').addClass("in-place");
   };
 
