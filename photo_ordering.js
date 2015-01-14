@@ -11,20 +11,19 @@
   };
 
   PhotoArray.prototype.attachListeners = function () {
-    this.$container.find('.photo').click(this.grabElement.bind(this));
+    this.$container.click(this.grabElement.bind(this));
   };
 
   PhotoArray.prototype.grabElement = function (event) {
     this.$el = $(event.target).addClass('grabbed');
+    this.$container.off();
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
-    this.$el.mousemove(this.moveElement.bind(this));
+    this.$container.mousemove(this.moveElement.bind(this));
     this.$el.click(this.releaseElement.bind(this));
   };
 
   PhotoArray.prototype.moveElement = function (event) {
-    this.$el.unbind('mousemove');
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
-    this.$el.mousemove(this.moveElement.bind(this));
   };
 
   PhotoArray.prototype.placePhotos = function (positions, draggedPos, $photos) {
@@ -51,7 +50,7 @@
     $photos.remove();
     this.placePhotos(photoPositions, draggedPos, $photos);
     this.$el.removeClass('grabbed');
-    this.attachListeners();
+    setTimeout(this.attachListeners.bind(this), 0);
   };
 
   var getPositions = function ($photos) {
