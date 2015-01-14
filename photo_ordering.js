@@ -18,16 +18,13 @@
     this.$el = $(event.target).replaceWith('<div class="photo placeholder">');
     this.$el.addClass('grabbed').removeClass("in-place");
     this.$container.append(this.$el);
-    this.elOrigin = this.$el.position();
-    placeEl(this.$el, event.pageX - 100, event.pageY - 150);
     this.$container.mousemove(this.moveElement.bind(this));
     this.$el.click(this.releaseElement.bind(this));
   };
 
   PhotoArray.prototype.moveElement = function (event) {
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
-    var $placeholder = this.$container.find('.placeholder');
-    $placeholder.remove();
+    var $placeholder = this.$container.find('.placeholder').remove();
     var $photos = this.$container.find('.in-place');
     var photoPositions = getPositions($photos);
     $photos.remove();
