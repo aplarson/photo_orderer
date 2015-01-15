@@ -3,7 +3,7 @@
 
   Orderable.PhotoArray = PhotoArray =  function () {
     this.$container = $('.orderable');
-    this.$container.click(this.grabElement.bind(this));
+    this.$container.mousedown(this.grabElement.bind(this));
   };
 
   PhotoArray.prototype.grabElement = function (event) {
@@ -12,7 +12,7 @@
     this.$container.append(this.$el);
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
     this.$container.mousemove(this.moveElement.bind(this));
-    this.$el.click(this.releaseElement.bind(this));
+    this.$el.mouseup(this.releaseElement.bind(this));
   };
 
   PhotoArray.prototype.moveElement = function (event) {
@@ -36,7 +36,7 @@
 
   PhotoArray.prototype.releaseElement = function (event) {
     event.stopPropagation();
-    this.$el.off('click');
+    this.$el.off('mouseup');
     var draggedPos = this.$el.position();
     this.$container.find('.placeholder').replaceWith(this.$el);
     this.$el.removeClass('grabbed').addClass("in-place");
