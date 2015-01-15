@@ -3,14 +3,6 @@
 
   Orderable.PhotoArray = PhotoArray =  function () {
     this.$container = $('.orderable');
-  };
-
-  Orderable.initialize = function () {
-    var orderable = new PhotoArray();
-    orderable.attachListeners();
-  };
-
-  PhotoArray.prototype.attachListeners = function () {
     this.$container.click(this.grabElement.bind(this));
   };
 
@@ -82,7 +74,6 @@
   };
 
   var placeEl = function ($el, x, y) {
-    $el.css('top', y);
-    $el.css('left', x);
+    $el.css({'top': y, 'left': x });
   };
 })();
