@@ -5,15 +5,16 @@
     this.$container = $container;
     this.picSize = picSize;
     this.$container.mousedown(this.grabElement.bind(this));
+    this.$container.mouseup(this.releaseElement.bind(this));
   };
 
   PhotoArray.prototype.grabElement = function (event) {
     this.$el = $(event.target).replaceWith('<div class="photo placeholder">');
-    this.$el.addClass('grabbed').removeClass("in-place");
+    this.$el.toggleClass('grabbed in-place');
+    this.$photos = this.$container.find('.in-place');
     this.$container.append(this.$el);
     placeEl(this.$el, placePos(event, this.picSize));
     this.$container.mousemove(this.moveElement.bind(this));
-    this.$container.mouseup(this.releaseElement.bind(this));
   };
 
   PhotoArray.prototype.moveElement = function (event) {
@@ -27,8 +28,7 @@
     if (!this.dropPosition(draggedPos, $placeholder.position())) {
       var dropped = false;
       $placeholder.remove();
-      var $photos = this.$container.find('.in-place');
-      $photos.each(function (idx, photo) {
+      this.$photos.each(function (idx, photo) {
         if (!dropped && this.dropPosition(draggedPos, $(photo).position())) {
           $(photo).before($placeholder);
           dropped = true;
@@ -42,7 +42,8 @@
 
   PhotoArray.prototype.releaseElement = function (event) {
     this.$container.find('.placeholder').replaceWith(this.$el);
-    this.$el.removeClass('grabbed').addClass("in-place");
+    this.$el.toggleClass('grabbed in-place');
+    this.$el = null;
     this.$container.off('mousemove');
   };
 
