@@ -49,14 +49,6 @@
     return inRow(heldPos, pos) && pos.left > heldPos.left
   };
 
-  var getPositions = function ($photos) {
-    var photoPositions = [];
-    $photos.each(function (idx, photo) {
-      photoPositions[idx] = $(photo).position();
-    });
-    return photoPositions;
-  };
-
   var inRow = function (draggedPos, fixedPos) {
     if (fixedPos.top < 300) {
       return draggedPos.top <= 300
