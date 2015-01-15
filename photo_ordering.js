@@ -22,18 +22,21 @@
   };
 
   PhotoArray.prototype.placePhotos = function () {
-    var dropped = false;
-    var $placeholder = this.$container.find('.placeholder').remove();
-    var $photos = this.$container.find('.in-place');
+    var $placeholder = this.$container.find('.placeholder');
     var draggedPos = { top: event.pageY, left: event.pageX };
-    $photos.each(function (idx, photo) {
-      if (!dropped && dropPosition(draggedPos, $(photo).position(), this.picSize)) {
-        $(photo).before($placeholder);
-        dropped = true;
+    if (!dropPosition(draggedPos, $placeholder.position(), this.picSize)) {
+      var dropped = false;
+      $placeholder.remove();
+      var $photos = this.$container.find('.in-place');
+      $photos.each(function (idx, photo) {
+        if (!dropped && dropPosition(draggedPos, $(photo).position(), this.picSize)) {
+          $(photo).before($placeholder);
+          dropped = true;
+        }
+      }.bind(this));
+      if (!dropped) {
+        this.$container.append($placeholder);
       }
-    }.bind(this));
-    if (!dropped) {
-      this.$container.append($placeholder);
     }
   };
 
@@ -51,10 +54,10 @@
 
   var inRow = function (draggedPos, fixedPos, height) {
     if (fixedPos.top < height) {
-      return draggedPos.top <= height
+      return draggedPos.top <= height;
     }
     else {
-      return draggedPos.top >= height
+      return draggedPos.top >= height;
     }
   };
 
