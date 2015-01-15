@@ -11,7 +11,6 @@
     this.$el.addClass('grabbed').removeClass("in-place");
     this.$container.append(this.$el);
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
-    this.render(this.$container.find('.placeholder'));
     this.$container.mousemove(this.moveElement.bind(this));
     this.$el.click(this.releaseElement.bind(this));
   };
@@ -22,14 +21,13 @@
     this.render($placeholder);
   };
 
-  PhotoArray.prototype.placePhotos = function (positions, draggedPos, $photos, $el) {
+  PhotoArray.prototype.placePhotos = function (draggedPos, $photos, $el) {
     var dropped = false;
     $photos.each(function (idx, photo) {
-      if (!dropped && dropPosition(draggedPos, positions[idx])) {
-        this.$container.append($el);
+      if (!dropped && dropPosition(draggedPos, $(photo).position())) {
+        $(photo).before($el);
         dropped = true;
       }
-      this.$container.append($(photo));
     }.bind(this));
     if (!dropped) {
       this.$container.append($el);
@@ -38,18 +36,16 @@
 
   PhotoArray.prototype.releaseElement = function (event) {
     event.stopPropagation();
+    this.$el.off('click');
     var draggedPos = this.$el.position();
-    this.$container.find('.placeholder').remove();
-    this.render(this.$el);
+    this.$container.find('.placeholder').replaceWith(this.$el);
     this.$el.removeClass('grabbed').addClass("in-place");
     this.$container.off('mousemove');
   };
 
   PhotoArray.prototype.render = function ($el) {
     var $photos = this.$container.find('.in-place');
-    var photoPositions = getPositions($photos);
-    $photos.remove();
-    this.placePhotos(photoPositions, this.$el.position(), $photos, $el);
+    this.placePhotos(this.$el.position(), $photos, $el);
   };
 
   var dropPosition = function (heldPos, pos) {
