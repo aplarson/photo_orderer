@@ -37,9 +37,7 @@
   };
 
   PhotoArray.prototype.releaseElement = function (event) {
-    event.stopPropagation();
     this.$el.off('mouseup');
-    var draggedPos = this.$el.position();
     this.$container.find('.placeholder').replaceWith(this.$el);
     this.$el.removeClass('grabbed').addClass("in-place");
     this.$container.off('mousemove');
