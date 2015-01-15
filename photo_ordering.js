@@ -21,15 +21,15 @@
     this.placePhotos(event);
   };
 
-  PhotoArray.prototype.placePhotos = function () {
+  PhotoArray.prototype.placePhotos = function (event) {
     var $placeholder = this.$container.find('.placeholder');
     var draggedPos = { top: event.pageY, left: event.pageX };
-    if (!dropPosition(draggedPos, $placeholder.position(), this.picSize)) {
+    if (!this.dropPosition(draggedPos, $placeholder.position())) {
       var dropped = false;
       $placeholder.remove();
       var $photos = this.$container.find('.in-place');
       $photos.each(function (idx, photo) {
-        if (!dropped && dropPosition(draggedPos, $(photo).position(), this.picSize)) {
+        if (!dropped && this.dropPosition(draggedPos, $(photo).position())) {
           $(photo).before($placeholder);
           dropped = true;
         }
@@ -46,18 +46,18 @@
     this.$container.off('mousemove');
   };
 
-  var dropPosition = function (heldPos, pos, size) {
-    return inRow(heldPos, pos, size.height) &&
+  PhotoArray.prototype.dropPosition = function (heldPos, pos) {
+    return this.inRow(heldPos, pos) &&
       pos.left < heldPos.left &&
-      heldPos.left < pos.left + size.width;
+      heldPos.left < pos.left + this.picSize.width;
   };
 
-  var inRow = function (draggedPos, fixedPos, height) {
-    if (fixedPos.top < height) {
-      return draggedPos.top <= height;
+  PhotoArray.prototype.inRow = function (draggedPos, fixedPos) {
+    if (fixedPos.top < this.picSize.height) {
+      return draggedPos.top <= this.picSize.height;
     }
     else {
-      return draggedPos.top >= height;
+      return draggedPos.top >= this.picSize.height;
     }
   };
 
