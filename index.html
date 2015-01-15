@@ -20,7 +20,9 @@
 
   <script>
     $(document).ready(function () {
-      new window.Orderable.PhotoArray();
+      new window.Orderable.PhotoArray($('.orderable'),
+        { width: 200, height: 300 }
+      );
     });
   </script>
 </body>

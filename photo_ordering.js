@@ -1,8 +1,9 @@
 (function () {
   window.Orderable = Orderable = {};
 
-  Orderable.PhotoArray = PhotoArray =  function () {
-    this.$container = $('.orderable');
+  Orderable.PhotoArray = PhotoArray =  function ($container, picSize) {
+    this.$container = $container;
+    this.picSize = picSize;
     this.$container.mousedown(this.grabElement.bind(this));
   };
 
@@ -10,13 +11,13 @@
     this.$el = $(event.target).replaceWith('<div class="photo placeholder">');
     this.$el.addClass('grabbed').removeClass("in-place");
     this.$container.append(this.$el);
-    placeEl(this.$el, event.pageX - 100, event.pageY - 150);
+    placeEl(this.$el, placePos(event, this.picSize));
     this.$container.mousemove(this.moveElement.bind(this));
     this.$container.mouseup(this.releaseElement.bind(this));
   };
 
   PhotoArray.prototype.moveElement = function (event) {
-    placeEl(this.$el, event.pageX - 100, event.pageY - 150);
+    placeEl(this.$el, placePos(event, this.picSize));
     this.placePhotos(event);
   };
 
@@ -26,7 +27,7 @@
     var $photos = this.$container.find('.in-place');
     var draggedPos = { top: event.pageY, left: event.pageX };
     $photos.each(function (idx, photo) {
-      if (!dropped && dropPosition(draggedPos, $(photo).position())) {
+      if (!dropped && dropPosition(draggedPos, $(photo).position(), this.picSize)) {
         $(photo).before($placeholder);
         dropped = true;
       }
@@ -42,22 +43,27 @@
     this.$container.off('mousemove');
   };
 
-  var dropPosition = function (heldPos, pos) {
-    return inRow(heldPos, pos) &&
+  var dropPosition = function (heldPos, pos, size) {
+    return inRow(heldPos, pos, size.height) &&
       pos.left < heldPos.left &&
-      heldPos.left < pos.left + 200;
+      heldPos.left < pos.left + size.width;
   };
 
-  var inRow = function (draggedPos, fixedPos) {
-    if (fixedPos.top < 300) {
-      return draggedPos.top <= 300
+  var inRow = function (draggedPos, fixedPos, height) {
+    if (fixedPos.top < height) {
+      return draggedPos.top <= height
     }
     else {
-      return draggedPos.top >= 300
+      return draggedPos.top >= height
     }
   };
 
-  var placeEl = function ($el, x, y) {
-    $el.css({'top': y, 'left': x });
+  var placeEl = function ($el, pos) {
+    $el.css({'top': pos.top, 'left': pos.left });
+  };
+
+  var placePos = function (event, picSize) {
+    return { left: event.pageX - (picSize.width / 2),
+      top: event.pageY - (picSize.height / 2) };
   };
 })();
