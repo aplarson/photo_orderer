@@ -50,6 +50,7 @@
     this.$container.find('.placeholder').remove();
     this.render(this.$el);
     this.$el.removeClass('grabbed').addClass("in-place");
+    this.$container.off('mousemove');
   };
 
   PhotoArray.prototype.render = function ($el) {
