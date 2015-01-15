@@ -12,7 +12,7 @@
     this.$container.append(this.$el);
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
     this.$container.mousemove(this.moveElement.bind(this));
-    this.$el.mouseup(this.releaseElement.bind(this));
+    this.$container.mouseup(this.releaseElement.bind(this));
   };
 
   PhotoArray.prototype.moveElement = function (event) {
@@ -37,7 +37,6 @@
   };
 
   PhotoArray.prototype.releaseElement = function (event) {
-    this.$el.off('mouseup');
     this.$container.find('.placeholder').replaceWith(this.$el);
     this.$el.removeClass('grabbed').addClass("in-place");
     this.$container.off('mousemove');
