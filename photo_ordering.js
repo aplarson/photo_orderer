@@ -25,11 +25,11 @@
   PhotoArray.prototype.placePhotos = function (event) {
     var $placeholder = this.$container.find('.placeholder');
     var draggedPos = { top: event.pageY, left: event.pageX };
-    if (!this.dropPosition(draggedPos, $placeholder.position())) {
+    if (!this.dropPosition(draggedPos, $placeholder.offset())) {
       var dropped = false;
       $placeholder.remove();
       this.$photos.each(function (idx, photo) {
-        if (!dropped && this.dropPosition(draggedPos, $(photo).position())) {
+        if (!dropped && this.dropPosition(draggedPos, $(photo).offset())) {
           $(photo).before($placeholder);
           dropped = true;
         }

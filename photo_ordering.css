@@ -1,15 +1,16 @@
 .photo {
-  width: 25%;
-  height: 50%;
+  width: 200px;
+  height: 200px;
   float: left;
 }
 
 .grabbed {
-  position: absolute;
+  position: fixed;
 }
 
 .orderable {
   width: 800px;
   height: 400px;
   position: relative;
+  margin: auto;
 }
