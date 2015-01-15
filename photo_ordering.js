@@ -54,12 +54,8 @@
   };
 
   PhotoArray.prototype.inRow = function (draggedPos, fixedPos) {
-    if (fixedPos.top < this.picSize.height) {
-      return draggedPos.top <= this.picSize.height;
-    }
-    else {
-      return draggedPos.top >= this.picSize.height;
-    }
+    return draggedPos.top > fixedPos.top &&
+      draggedPos.top < fixedPos.top + this.picSize.height;
   };
 
   var placeEl = function ($el, pos) {
