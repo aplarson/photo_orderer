@@ -18,6 +18,7 @@
     this.$el = $(event.target).replaceWith('<div class="photo placeholder">');
     this.$el.addClass('grabbed').removeClass("in-place");
     this.$container.append(this.$el);
+    placeEl(this.$el, event.pageX - 100, event.pageY - 150);
     this.$container.mousemove(this.moveElement.bind(this));
     this.$el.click(this.releaseElement.bind(this));
   };
