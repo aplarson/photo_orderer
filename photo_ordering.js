@@ -17,20 +17,22 @@
 
   PhotoArray.prototype.moveElement = function (event) {
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
-    var $placeholder = this.$container.find('.placeholder').remove();
-    this.render($placeholder);
+    this.placePhotos();
   };
 
-  PhotoArray.prototype.placePhotos = function (draggedPos, $photos, $el) {
+  PhotoArray.prototype.placePhotos = function () {
     var dropped = false;
+    var $placeholder = this.$container.find('.placeholder').remove();
+    var $photos = this.$container.find('.in-place');
+    var draggedPos = this.$el.position();
     $photos.each(function (idx, photo) {
       if (!dropped && dropPosition(draggedPos, $(photo).position())) {
-        $(photo).before($el);
+        $(photo).before($placeholder);
         dropped = true;
       }
     }.bind(this));
     if (!dropped) {
-      this.$container.append($el);
+      this.$container.append($placeholder);
     }
   };
 
@@ -41,11 +43,6 @@
     this.$container.find('.placeholder').replaceWith(this.$el);
     this.$el.removeClass('grabbed').addClass("in-place");
     this.$container.off('mousemove');
-  };
-
-  PhotoArray.prototype.render = function ($el) {
-    var $photos = this.$container.find('.in-place');
-    this.placePhotos(this.$el.position(), $photos, $el);
   };
 
   var dropPosition = function (heldPos, pos) {
