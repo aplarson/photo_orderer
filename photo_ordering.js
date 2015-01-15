@@ -17,14 +17,14 @@
 
   PhotoArray.prototype.moveElement = function (event) {
     placeEl(this.$el, event.pageX - 100, event.pageY - 150);
-    this.placePhotos();
+    this.placePhotos(event);
   };
 
   PhotoArray.prototype.placePhotos = function () {
     var dropped = false;
     var $placeholder = this.$container.find('.placeholder').remove();
     var $photos = this.$container.find('.in-place');
-    var draggedPos = this.$el.position();
+    var draggedPos = { top: event.pageY, left: event.pageX };
     $photos.each(function (idx, photo) {
       if (!dropped && dropPosition(draggedPos, $(photo).position())) {
         $(photo).before($placeholder);
@@ -43,7 +43,9 @@
   };
 
   var dropPosition = function (heldPos, pos) {
-    return inRow(heldPos, pos) && pos.left > heldPos.left
+    return inRow(heldPos, pos) &&
+      pos.left < heldPos.left &&
+      heldPos.left < pos.left + 200;
   };
 
   var inRow = function (draggedPos, fixedPos) {
