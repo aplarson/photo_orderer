@@ -23,10 +23,8 @@
   <p>Images courtesy of <a href="https://placekitten.com/attribution.html">Placekitten</a></p>
 
   <script>
-    $(document).ready(function () {
-      new window.Orderable.PhotoArray($('.orderable'),
-        { width: 200, height: 200 }
-      );
+    $(function () {
+      $('.orderable').orderable({ width: 200, height: 200 });
     });
   </script>
 </body>
