@@ -17,12 +17,12 @@
     this.$el.toggleClass('grabbed in-place');
     this.$photos = this.$container.find('.in-place');
     this.$container.append(this.$el);
-    placeEl(this.$el, placePos(event, this.picSize, this.$container));
+    placeEl(this.$el, placePos(event, this.picSize));
     this.$container.mousemove(this.moveElement.bind(this));
   };
 
   Orderable.prototype.moveElement = function (event) {
-    placeEl(this.$el, placePos(event, this.picSize, this.$container));
+    placeEl(this.$el, placePos(event, this.picSize));
     this.placePhotos(event);
   };
 
@@ -66,7 +66,7 @@
     $el.css({'top': pos.top, 'left': pos.left });
   };
 
-  var placePos = function (event, picSize, $container) {
+  var placePos = function (event, picSize) {
     return { left: event.pageX - (picSize.width / 2),
       top: event.pageY - (picSize.height / 2) - $('body').scrollTop() };
   };
